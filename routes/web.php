@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/info',function(){
+	phpinfo();
+});
+Route::get('/take/hello','Take\TakeController@hello');
+
+
+
+
