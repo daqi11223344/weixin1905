@@ -25,6 +25,7 @@ Route::get('/user/login','User\UserController@login');
 
 Route::get('/take/redis1','Take\TakeController@redis1');
 Route::get('/take/redis2','Take\TakeController@redis2');
+Route::get('/take/baidu','Take\TakeController@baidu');
 
 
 
