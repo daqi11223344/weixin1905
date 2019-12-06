@@ -12,6 +12,7 @@ class WxController extends Controller
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
+        $echostr = $_GET["echostr"];
 	
         $token = TOKEN;
         $tmpArr = array($token, $timestamp, $nonce);
@@ -20,9 +21,9 @@ class WxController extends Controller
         $tmpStr = sha1( $tmpStr );
     
         if( $tmpStr == $signature ){
-            return true;
+            echo $echostr
         }else{
-            return false;
+            die("not ok");
         }
      }
 }
