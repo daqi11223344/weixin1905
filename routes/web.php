@@ -21,6 +21,11 @@ Route::get('/info',function(){
 });
 Route::get('/take/hello','Take\TakeController@hello');
 
+Route::get('/user/login','User\UserController@login');
+
+Route::get('/take/redis1','Take\TakeController@redis1');
+Route::get('/take/redis2','Take\TakeController@redis2');
+
 
 
 
