@@ -27,7 +27,7 @@ Route::get('/take/redis1','Take\TakeController@redis1');
 Route::get('/take/redis2','Take\TakeController@redis2');
 Route::get('/take/baidu','Take\TakeController@baidu');
 
-Route::get('/wx','WeiXin\WxController@wechet');
+Route::get('/wx','WeiXin\WxController@wechat');
 
 
 
