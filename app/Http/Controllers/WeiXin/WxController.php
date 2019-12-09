@@ -35,7 +35,7 @@ class WxController extends Controller
         $xml_str = file_get_contents("php://input");
         $data = date('Y-m-d H:i:s') . $xml_str;
         file_put_contents($log_file,$data,FILE_APPEND);
-        $xml_str = simplexml_load_file($xml_str);
+        $xml_str = simplexml_load_string($xml_str);
     }
 
 
