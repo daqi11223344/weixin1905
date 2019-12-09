@@ -24,4 +24,13 @@ class WxController extends Controller
             die("not ok");
         }
     }
+
+
+    public function receiv(){
+        $log_file = "weixin1905.log";
+        $data = json_encode($_post);
+        file_put_contents($log_file,$data,FILE_APPEND);
+    }
+
+
 }
