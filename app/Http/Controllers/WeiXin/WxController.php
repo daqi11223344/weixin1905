@@ -27,7 +27,7 @@ class WxController extends Controller
 
 
     public function receiv(){
-        $log_file = "weixin1905.log";
+        $log_file = "weixin1905.access.log";
         $data = json_encode($_post);
         file_put_contents($log_file,$data,FILE_APPEND);
     }
