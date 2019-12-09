@@ -27,6 +27,8 @@ Route::get('/take/redis1','Take\TakeController@redis1');
 Route::get('/take/redis2','Take\TakeController@redis2');
 Route::get('/take/baidu','Take\TakeController@baidu');
 
+Route::get('/take/xml','Take\TakeController@xmlTake');
+
 Route::get('/wx','WeiXin\WxController@wechat');
 Route::post('/wx','WeiXin\WxController@receiv');        //接受微信的推送事件
 
