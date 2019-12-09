@@ -13,11 +13,15 @@ class WxController extends Controller
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
-        $echostr = $_GET["echostr"];
+        $echostr = $_GET["echostr"];
+
+
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
+        $tmpStr = sha1( $tmpStr );
+
+
         if( $tmpStr == $signature ){        //验证通过
             echo $echostr;
         }else{
@@ -28,8 +32,18 @@ class WxController extends Controller
 
     public function receiv(){
         $log_file = "weixin1905.access.log";
-        $data = json_encode($_post);
+        $data = file_get_contents("php://input");
         file_put_contents($log_file,$data,FILE_APPEND);
+    }
+
+
+    /**
+     * 获取用户基本信息
+     *
+     * @return void
+     */
+    public function UserInfo(){
+        $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN';
     }
 
 
