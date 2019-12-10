@@ -19,6 +19,7 @@ class WxController extends Controller
         $arr = json_decode($data_json,true);
         return $arr['access_token'];
     }
+    
          public function wechat()
     {
         $token = '2259b56f5898cd6192c50';       //开发提前设置好的 token
@@ -57,6 +58,24 @@ class WxController extends Controller
             $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->access_token.'&openid='.$openid.'&lang=zh_CN';
             $user_info = file_get_contents($url);
             file_put_contents('wx_user.log',$user_info,FILE_APPEND);
+        }
+
+        $msg_type = $xml_obj->MsgType;
+
+        $touser = $xml_obj->FromUserName;
+        $fromuser = $xml_obj->ToUserName;
+        $time = time();
+
+        if($msg_type=='text'){
+            $content = date('Y-m-d H:i:s') . $xml_obj->Content;
+            $response_text = '<xml>
+                <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+                <CreateTime>'.$time.'</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA['.$content.']]></Content>
+                </xml>';
+            echo $response_text;            // 回复用户消息
         }
     }
 
