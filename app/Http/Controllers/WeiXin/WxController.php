@@ -109,7 +109,6 @@ class WxController extends Controller
             echo $response_text;            // 回复用户消息
         }
         }
-    }
 
 
     /**
