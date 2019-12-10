@@ -66,6 +66,7 @@ class WxController extends Controller
         $fromuser = $xml_obj->ToUserName;
         $time = time();
 
+        // 回复文本
         if($msg_type=='text'){
             $content = date('Y-m-d H:i:s') . $xml_obj->Content;
             $response_text = '<xml>
@@ -78,6 +79,7 @@ class WxController extends Controller
             echo $response_text;            // 回复用户消息
         }
 
+        // 回复图片
         if($msg_type=='image'){
             $content = $xml_obj->MediaId;
             $response_text = '<xml>
@@ -92,6 +94,21 @@ class WxController extends Controller
             echo $response_text;            // 回复用户消息
         }
 
+        // 回复语音
+        if($msg_type=='voice'){
+            $content = $xml_obj->MediaId;
+            $response_text = '<xml>
+                <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+                <CreateTime>'.$time.'</CreateTime>
+                <MsgType><![CDATA[voice]]></MsgType>
+                <Voice>
+                    <MediaId><![CDATA['.$content.']]></MediaId>
+                </Voice>
+                </xml>';
+            echo $response_text;            // 回复用户消息
+        }
+        }
     }
 
 
