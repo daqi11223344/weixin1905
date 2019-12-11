@@ -108,7 +108,24 @@ class WxController extends Controller
                 </xml>';
             echo $response_text;            // 回复用户消息
         }
+
+        // 回复视频
+        // if($msg_type=='video'){
+        //     $content = $xml_obj->MediaId;
+        //     $response_text = '<xml>
+        //         <ToUserName><![CDATA['.$touser.']]></ToUserName>
+        //         <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+        //         <CreateTime>'.$time.'</CreateTime>
+        //         <MsgType><![CDATA[video]]></MsgType>
+        //         <Video>
+        //             <MediaId><![CDATA['.$content.']]></MediaId>
+        //             <Title><![CDATA[title]]></Title>
+        //             <Description><![CDATA[description]]></Description>
+        //         </Video>
+        //         </xml>';
+        //     echo $response_text;            // 回复用户消息
         }
+    }
 
 
     /**
