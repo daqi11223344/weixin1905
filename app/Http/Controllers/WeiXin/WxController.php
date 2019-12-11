@@ -124,7 +124,7 @@ class WxController extends Controller
         //         </Video>
         //         </xml>';
         //     echo $response_text;            // 回复用户消息
-        }
+        // }
     }
 
 
