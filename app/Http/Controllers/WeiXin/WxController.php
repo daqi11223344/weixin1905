@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WeiXin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Model\WxUserModel;
 
 class WxController extends Controller
 {
@@ -14,7 +15,7 @@ class WxController extends Controller
     }
 
     public function getAccessToken(){
-        $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WX_APPID').'&secret='.env('WX_APPSECRET');
+        $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WX_APPID').'&secret='.env('WX_APPSECRET').'';
         $data_json = file_get_contents($url);
         $arr = json_decode($data_json,true);
         return $arr['access_token'];
@@ -50,21 +51,66 @@ class WxController extends Controller
         file_put_contents($log_file,$data,FILE_APPEND);
         $xml_obj = simplexml_load_string($xml_str);
 
-        $event = $xml_obj->Event;  //获取事件类型
-        if($event=='subscribe'){
-            // 获取用户的openid
-            $openid = $xml_obj->FromUserName;
-
-            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->access_token.'&openid='.$openid.'&lang=zh_CN';
-            $user_info = file_get_contents($url);
-            file_put_contents('wx_user.log',$user_info,FILE_APPEND);
-        }
-
         $msg_type = $xml_obj->MsgType;
 
         $touser = $xml_obj->FromUserName;
         $fromuser = $xml_obj->ToUserName;
         $time = time();
+
+        $event = $xml_obj->Event;  //获取事件类型
+        if($event=='subscribe'){
+            // 获取用户的openid
+            $openid = $xml_obj->FromUserName;
+            $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
+            $user_json=file_get_contents($user);
+            $user_arr=json_decode($user_json,true);
+            $u = WxUserModel::where(['openid'=>$openid])->first();
+            if($u){
+                // TODO欢迎回来
+                // echo "欢迎回来";die;
+                $name = '欢迎您再次回家'.$user_arr['nickname'];
+                $data=[
+                    'sub_time'=>$xml_obj->CreateTime,
+                    'nickname'=>$user_arr['nickname'],
+                    'sex'=>$user_arr['sex'],
+                ];
+                WxUserModel::where('openid','=',$openid)->update($data);
+                $jie='<xml>
+                    <ToUserName><![CDATA['.$fromuser.']]></ToUserName>
+                    <FromUserName><![CDATA['.$touser.']]></FromUserName>
+                    <CreateTime>'.$time.'</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA['.$name.']]></Content>
+                    </xml>';
+                echo $jie;
+            }else{
+
+            
+                $name='感谢您的关注'.$user_arr['nickname'];
+                  //第一次关注添加入库
+            $data=[
+                'openid'=>$openid,
+                'sub_time'=>$xml_obj->CreateTime,
+                'nickname'=>$user_arr['nickname'],
+                'sex'=>$user_arr['sex'],
+            ];
+                // openid入库
+                WxUserModel::insertGetId($data);
+                $jie='<xml>
+                    <ToUserName><![CDATA['.$fromuser.']]></ToUserName>
+                    <FromUserName><![CDATA['.$touser.']]></FromUserName>
+                    <CreateTime>'.$time.'</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA['.$name.']]></Content>
+                    </xml>';
+             echo $jie;
+            }
+            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->access_token.'&openid='.$openid.'&lang=zh_CN';
+            $user_info = file_get_contents($url);
+            file_put_contents('wx_user.log',$user_info,FILE_APPEND);
+        }
+
+        
 
         // 回复文本
         if($msg_type=='text'){
