@@ -68,7 +68,7 @@ class WxController extends Controller
             if($u){
                 // TODO欢迎回来
                 // echo "欢迎回来";die;
-                $name = '欢迎您再次回家'.$user_arr['nickname'];
+                $content = '欢迎您再次回家'.$user_arr['nickname'];
                 $data=[
                     'sub_time'=>$xml_obj->CreateTime,
                     'nickname'=>$user_arr['nickname'],
@@ -80,13 +80,13 @@ class WxController extends Controller
                     <FromUserName><![CDATA['.$touser.']]></FromUserName>
                     <CreateTime>'.$time.'</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
-                    <Content><![CDATA['.$name.']]></Content>
+                    <Content><![CDATA['.$content.']]></Content>
                     </xml>';
                 echo $jie;
             }else{
 
             
-                $name='感谢您的关注'.$user_arr['nickname'];
+                $content='感谢您的关注'.$user_arr['nickname'];
                   //第一次关注添加入库
             $data=[
                 'openid'=>$openid,
@@ -101,7 +101,7 @@ class WxController extends Controller
                     <FromUserName><![CDATA['.$touser.']]></FromUserName>
                     <CreateTime>'.$time.'</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
-                    <Content><![CDATA['.$name.']]></Content>
+                    <Content><![CDATA['.$content.']]></Content>
                     </xml>';
              echo $jie;
             }
