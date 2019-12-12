@@ -46,10 +46,10 @@ class WxController extends Controller
 
     public function receiv(){
         $log_file = "weixin1905.access.log";
-        $xml_str = file_get_contents("php://input");
-        $data = date('Y-m-d H:i:s') . $xml_str;
+        $xml = file_get_contents("php://input");
+        $data = date('Y-m-d H:i:s') . $xml;
         file_put_contents($log_file,$data,FILE_APPEND);
-        $xml_obj = simplexml_load_string($xml_str);
+        $xml_obj=simplexml_load_string($xml);
 
         $msg_type = $xml_obj->MsgType;
 
@@ -76,8 +76,8 @@ class WxController extends Controller
                 ];
                 WxUserModel::where('openid','=',$openid)->update($data);
                 $jie='<xml>
-                    <ToUserName><![CDATA['.$fromuser.']]></ToUserName>
-                    <FromUserName><![CDATA['.$touser.']]></FromUserName>
+                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
                     <CreateTime>'.$time.'</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
                     <Content><![CDATA['.$content.']]></Content>
@@ -97,8 +97,8 @@ class WxController extends Controller
                 // openid入库
                 WxUserModel::insertGetId($data);
                 $jie='<xml>
-                    <ToUserName><![CDATA['.$fromuser.']]></ToUserName>
-                    <FromUserName><![CDATA['.$touser.']]></FromUserName>
+                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
                     <CreateTime>'.$time.'</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
                     <Content><![CDATA['.$content.']]></Content>
