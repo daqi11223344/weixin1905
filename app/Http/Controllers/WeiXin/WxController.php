@@ -141,11 +141,33 @@ class WxController extends Controller
             echo $response_text;            // 回复用户消息
  
         }elseif($msg_type=='image'){     // 回复图片
+          //下载图片
             $this->getMedia2($media_id,$msg_type);
 
+            //回复图片
+             $response_text = '<xml>
+                 <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                 <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+                 <CreateTime>'.$time.'</CreateTime>
+                 <MsgType><![CDATA[image]]></MsgType>
+                 <Image>
+                     <MediaId><![CDATA['.$media_id.']]></MediaId>
+                 </Image>
+                 </xml>';
         }elseif($msg_type=='voice'){     // 回复语音
+            //下载语音
             $this->getMedia2($media_id,$msg_type);
 
+            //回复语音
+             $response_text = '<xml>
+                 <ToUserName><![CDATA['.$touser.']]></ToUserName>
+                 <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+                 <CreateTime>'.$time.'</CreateTime>
+                 <MsgType><![CDATA[voice]]></MsgType>
+                 <Voice>
+                     <MediaId><![CDATA['.$media_id.']]></MediaId>
+                 </Voice>
+                 </xml>';
         }
     }
 
