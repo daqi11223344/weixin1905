@@ -13,5 +13,4 @@ yarn-error.log
 .vs
 public/*.log
 .idea/
-public/wx_media/
 

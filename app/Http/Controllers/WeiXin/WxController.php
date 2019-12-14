@@ -60,7 +60,7 @@ class WxController extends Controller
 
 
     public function receiv(){
-        $log_file = "weixin1905.access.log";
+        $log_file = "weixin1905.access.log";    //微信日志
         $xml_str = file_get_contents("php://input");
         $data = date('Y-m-d H:i:s') . $xml_str ;
         
@@ -220,7 +220,7 @@ class WxController extends Controller
 
            
            file_put_contents($save_path,$file_content);
-//            echo "文件保存成功: ".$save_path;
+            echo "文件保存成功: ".$save_path;
            }
 
 }
