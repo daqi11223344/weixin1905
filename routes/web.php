@@ -12,6 +12,11 @@
 */
 
 Route::get('/', function () {
+    $file_name = "adc.mp3";
+    $info = pathinfo($file_name);
+
+    echo $file_name . '的文件扩展名为 ：' . pathinfo($file_name)['extension'];die;
+    echo '<pre>';print_r($info);echo '</pre>';die;
     return view('welcome');
 });
 
@@ -31,6 +36,8 @@ Route::get('/take/xml','Take\TakeController@xmlTake');
 
 Route::get('/wx','WeiXin\WxController@wechat');
 Route::post('/wx','WeiXin\WxController@receiv');        //接受微信的推送事件
+Route::get('/wx/media','WeiXin\WxController@getmedia');        //获取临时素材
+Route::get('/wx/test','WeiXin\WxController@test');        //获取临时素材
 
 
 
