@@ -12,11 +12,11 @@
 */
 
 Route::get('/', function () {
-    $file_name = "adc.mp3";
-    $info = pathinfo($file_name);
-
-    echo $file_name . '的文件扩展名为 ：' . pathinfo($file_name)['extension'];die;
-    echo '<pre>';print_r($info);echo '</pre>';die;
+//    $file_name = "adc.mp3";
+//    $info = pathinfo($file_name);
+//
+//    echo $file_name . '的文件扩展名为 ：' . pathinfo($file_name)['extension'];die;
+//    echo '<pre>';print_r($info);echo '</pre>';die;
     return view('welcome');
 });
 
