@@ -143,7 +143,6 @@ class WxController extends Controller
         }elseif($msg_type=='image'){     // 回复图片
           //下载图片
             $this->getMedia2($media_id,$msg_type);
-
             //回复图片
              $response_text = '<xml>
                  <ToUserName><![CDATA['.$touser.']]></ToUserName>
@@ -154,10 +153,10 @@ class WxController extends Controller
                      <MediaId><![CDATA['.$media_id.']]></MediaId>
                  </Image>
                  </xml>';
+             echo $response_text;
         }elseif($msg_type=='voice'){     // 回复语音
             //下载语音
             $this->getMedia2($media_id,$msg_type);
-
             //回复语音
              $response_text = '<xml>
                  <ToUserName><![CDATA['.$touser.']]></ToUserName>
@@ -168,6 +167,7 @@ class WxController extends Controller
                      <MediaId><![CDATA['.$media_id.']]></MediaId>
                  </Voice>
                  </xml>';
+           echo $response_text;
         }
     }
 
