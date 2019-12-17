@@ -27,8 +27,13 @@ class VoiceController extends AdminController
         $grid = new Grid(new VoiceModel);
 
         $grid->column('vid', __('Vid'));
-        $grid->column('voice_time', __('Voice time'));
-        $grid->column('voice', __('Voice'));
+        $grid->column('voice_time', __('Voice time'))->display(function($voice_time) {
+            return date('Y-m-d H:i:s', $voice_time);
+        });
+//        $grid->column('voice', __('Voice'));
+        $grid->column('voice', __('语音消息'))->display(function($voice){
+            return '<audio src="http://wangqi.bianaoao.top/'.$voice.'" controls></audio>';
+        });
         $grid->column('uid', __('Uid'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));

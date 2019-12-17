@@ -27,10 +27,13 @@ class ImgController extends AdminController
         $grid = new Grid(new ModelImgModel);
 
         $grid->column('i_id', __('I id'));
-        $grid->column('img_time', __('Img time'));
-        $grid->column('imgs', __('Imgs'))->display(function($img){
-            return '<img src="http"//weixin.1905.com/'.$img.'" width="100" height="100">';
-        });;
+        $grid->column('img_time', __('Img time'))->display(function($img_time){
+            return date('Y-m-d H:i:s',$img_time);
+        });
+        $grid->column('imgs', __('Imgs'))->display(function($imgs){
+            return '<img src="http://wangqi.bianaoao.top/'.$imgs.'" width="100" height="100">';
+
+        });
 //        $grid->column('headimgurl',__('Headimgurl'))->display(function($img){
 //            return '<img src="'.$img.'">';
 //        });
