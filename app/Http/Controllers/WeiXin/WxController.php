@@ -145,7 +145,7 @@ class WxController extends Controller
                 $tmp = $weather_info_arr['HeWeather6'][0]['now']['tmp'];
                 $wind_dir = $weather_info_arr['HeWeather6'][0]['now']['wind_dir'];
 
-                $msg = $cond_txt . '温度: '.$tmp. '风向: '. $wind_dir;
+                $msg = $cond_txt ."\n" . '温度: '.$tmp. "\n" . '风向: '. $wind_dir;
 
 
                 $response_xml='
