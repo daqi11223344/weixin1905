@@ -169,7 +169,7 @@ class WxController extends Controller
                     ];
 
                     $post = ModelImgModel::insertGetId($data);
-                    dd($post);
+
                 }
             } elseif ($msg_type == 'voice') {     // 回复语音
                 //下载语音
@@ -193,7 +193,7 @@ class WxController extends Controller
                         ];
 
                         $pos = VoiceModel::insertGetId($data);
-                        dd($pos);
+
                     }
 
             }
@@ -347,18 +347,23 @@ class WxController extends Controller
 //            创建自定义菜单的接口地址
            $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
 
-           $menu = [
-               'button' => [
-                   [
-                       'type' => 'click',
-                       'name' => '1905wx',
-                       'key' =>'1905wx_key',
-                   ],
-                   [
-                       'type' => 'click',
-                       'name' => '1905wx2',
-                       'key' =>'1905wx_key2',
-                   ],
+                   $menu = [
+                       'button' => [
+                           [
+                               'type' => 'click',
+                               'name' => '1905wx',
+                               'key' =>'1905wx_key',
+                           ],
+                           [
+                               'name'=>'abc',
+                               'sub_button' => [
+                           [
+                               'type' => 'click',
+                               'name' => '1905wx2',
+                               'key' =>'1905wx_key2',
+                           ],
+                       ]
+                   ]
                ]
            ];
 
@@ -367,9 +372,9 @@ class WxController extends Controller
             $response = $client->request('POST',$url,[
                 'body' => $menu_json
             ]);
-            echo '<pre>';
-            print_r($menu);
-            echo '</pre>';
+//            echo '<pre>';
+//            print_r($menu);
+//            echo '</pre>';
             echo $response->getBody();  //接受 微信接口的响应数据
 
         }
