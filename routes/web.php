@@ -38,6 +38,9 @@ Route::get('/wx','WeiXin\WxController@wechat');
 Route::post('/wx','WeiXin\WxController@receiv');        //接受微信的推送事件
 Route::get('/wx/media','WeiXin\WxController@getmedia');        //获取临时素材
 Route::get('/wx/test','WeiXin\WxController@test');        //获取临时素材
+Route::get('/wx/msg','WeiXin\WxController@msg');        //图片
+
+Route::get('/wx/menu','WeiXin\WxController@createMenu');
 
 
 

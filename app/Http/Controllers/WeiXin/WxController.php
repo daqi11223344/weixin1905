@@ -5,6 +5,8 @@ namespace App\Http\Controllers\WeiXin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\WxUserModel;
+use App\Model\ModelImgModel;
+use App\Model\VoiceModel;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 
@@ -59,14 +61,15 @@ class WxController extends Controller
     }
 
 
-    public function receiv(){
+    public function receiv()
+    {
         $log_file = "weixin1905.access.log";    //微信日志
         $xml_str = file_get_contents("php://input");
-        $data = date('Y-m-d H:i:s') . $xml_str ;
-        
-        file_put_contents($log_file,$data,FILE_APPEND);
-        $xml_obj=simplexml_load_string($xml_str);
-       
+        $data = date('Y-m-d H:i:s') . $xml_str;
+
+        file_put_contents($log_file, $data, FILE_APPEND);
+        $xml_obj = simplexml_load_string($xml_str);
+
         $msg_type = $xml_obj->MsgType;
         // dd($msg_type);
         $touser = $xml_obj->FromUserName;
@@ -74,102 +77,127 @@ class WxController extends Controller
         $time = time();
 
         $event = $xml_obj->Event;  //获取事件类型
-        if($event=='subscribe'){
+        if ($event == 'subscribe') {
             // 获取用户的openid
             $openid = $xml_obj->FromUserName;
-            $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
-            $user_json=file_get_contents($user);
-            $user_arr=json_decode($user_json,true);
-            $u = WxUserModel::where(['openid'=>$openid])->first();
-            if($u){
+            $user = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->getAccessToken() . '&openid=' . $openid . '&lang=zh_CN';
+            $user_json = file_get_contents($user);
+            $user_arr = json_decode($user_json, true);
+            $u = WxUserModel::where(['openid' => $openid])->first();
+            if ($u) {
                 // TODO欢迎回来
                 // echo "欢迎回来";die;
-                $content = '欢迎您再次回家'.$user_arr['nickname'];
-                $data=[
-                    'sub_time'=>$xml_obj->CreateTime,
-                    'nickname'=>$user_arr['nickname'],
-                    'sex'=>$user_arr['sex'],
+                $content = '欢迎您再次回家' . $user_arr['nickname'];
+                $data = [
+                    'sub_time' => $xml_obj->CreateTime,
+                    'nickname' => $user_arr['nickname'],
+                    'sex' => $user_arr['sex'],
                 ];
-                WxUserModel::where('openid','=',$openid)->update($data);
-                $jie='<xml>
-                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
-                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-                    <CreateTime>'.$time.'</CreateTime>
+                WxUserModel::where('openid', '=', $openid)->update($data);
+                $jie = '<xml>
+                    <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                    <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                    <CreateTime>' . $time . '</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
-                    <Content><![CDATA['.$content.']]></Content>
+                    <Content><![CDATA[' . $content . ']]></Content>
                     </xml>';
                 echo $jie;
-            }else{
+            } else {
 
-            
-                $content='感谢您的关注'.$user_arr['nickname'];
-                  //第一次关注添加入库
-            $data=[
-                'openid'=>$openid,
-                'sub_time'=>$xml_obj->CreateTime,
-                'nickname'=>$user_arr['nickname'],
-                'sex'=>$user_arr['sex'],
-            ];
+
+                $content = '感谢您的关注' . $user_arr['nickname'];
+                //第一次关注添加入库
+                $data = [
+                    'openid' => $openid,
+                    'sub_time' => $xml_obj->CreateTime,
+                    'nickname' => $user_arr['nickname'],
+                    'sex' => $user_arr['sex'],
+                ];
                 // openid入库
                 WxUserModel::insertGetId($data);
-                $jie='<xml>
-                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
-                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-                    <CreateTime>'.$time.'</CreateTime>
+                $jie = '<xml>
+                    <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                    <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                    <CreateTime>' . $time . '</CreateTime>
                     <MsgType><![CDATA[text]]></MsgType>
-                    <Content><![CDATA['.$content.']]></Content>
+                    <Content><![CDATA[' . $content . ']]></Content>
                     </xml>';
-             echo $jie;
+                echo $jie;
             }
-            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->access_token.'&openid='.$openid.'&lang=zh_CN';
+            $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->access_token . '&openid=' . $openid . '&lang=zh_CN';
             $user_info = file_get_contents($url);
-            file_put_contents('wx_user.log',$user_info,FILE_APPEND);
+            file_put_contents('wx_user.log', $user_info, FILE_APPEND);
         }
 
-        
+
         $media_id = $xml_obj->MediaId;
+        $openid = $xml_obj->FromUserName;
+        $uid = WxUserModel::where('openid', '=', $touser)->value('uid');
+//        dd($uid);
         // 回复文本
-        if($msg_type=='text'){
+        if ($msg_type == 'text') {
             $content = date('Y-m-d H:i:s') . $xml_obj->Content;
             $response_text = '<xml>
-                <ToUserName><![CDATA['.$touser.']]></ToUserName>
-                <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-                <CreateTime>'.$time.'</CreateTime>
+                <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                <CreateTime>' . $time . '</CreateTime>
                 <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA['.$content.']]></Content>
+                <Content><![CDATA[' . $content . ']]></Content>
                 </xml>';
             echo $response_text;            // 回复用户消息
- 
-        }elseif($msg_type=='image'){     // 回复图片
-          //下载图片
-            $this->getMedia2($media_id,$msg_type);
+
+
+        } elseif ($msg_type == 'image') {     // 回复图片
+            //下载图片
+            $imgs = $this->getMedia2($media_id, $msg_type);
             //回复图片
-             $response_text = '<xml>
-                 <ToUserName><![CDATA['.$touser.']]></ToUserName>
-                 <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-                 <CreateTime>'.$time.'</CreateTime>
+            $response_text = '<xml>
+                 <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                 <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                 <CreateTime>' . $time . '</CreateTime>
                  <MsgType><![CDATA[image]]></MsgType>
                  <Image>
-                     <MediaId><![CDATA['.$media_id.']]></MediaId>
+                     <MediaId><![CDATA[' . $media_id . ']]></MediaId>
                  </Image>
                  </xml>';
-             echo $response_text;
-        }elseif($msg_type=='voice'){     // 回复语音
-            //下载语音
-            $this->getMedia2($media_id,$msg_type);
-            //回复语音
-             $response_text = '<xml>
-                 <ToUserName><![CDATA['.$touser.']]></ToUserName>
-                 <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-                 <CreateTime>'.$time.'</CreateTime>
+            echo $response_text;
+                if ($response_text) {
+                    $data = [
+                        'uid' => $uid,
+                        'img_time' => time(),
+                        'imgs' => $imgs,
+                    ];
+
+                    $post = ModelImgModel::insertGetId($data);
+                    dd($post);
+                }
+            } elseif ($msg_type == 'voice') {     // 回复语音
+                //下载语音
+                $voice = $this->getMedia2($media_id, $msg_type);
+                //回复语音
+                $response_text = '<xml>
+                 <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                 <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                 <CreateTime>' . $time . '</CreateTime>
                  <MsgType><![CDATA[voice]]></MsgType>
                  <Voice>
-                     <MediaId><![CDATA['.$media_id.']]></MediaId>
+                     <MediaId><![CDATA[' . $media_id . ']]></MediaId>
                  </Voice>
                  </xml>';
-           echo $response_text;
+                echo $response_text;
+                    if ($response_text) {
+                        $data = [
+                            'uid' => $uid,
+                            'voice_time' => time(),
+                            'voice' => $voice,
+                        ];
+
+                        $pos = VoiceModel::insertGetId($data);
+                        dd($pos);
+                    }
+
+            }
         }
-    }
 
 
     /**
@@ -242,8 +270,111 @@ class WxController extends Controller
 
            
            file_put_contents($save_path,$file_content);
-            echo "文件保存成功: ".$save_path;
+            return $save_path;
            }
+
+            //保存图片至数据库
+//           public function img(){
+//               $xml_str = file_get_contents("php://input");
+//               $xml_obj=simplexml_load_string($xml_str);
+//               $msg_type = $xml_obj->MsgType;
+//               // dd($msg_type);
+//               $touser = $xml_obj->FromUserName;
+//               $fromuser = $xml_obj->ToUserName;
+//               $time = time();
+//               $openid = $xml_obj->FromUserName;
+//               $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
+//               $user_json=file_get_contents($user);
+//               $user_arr=json_decode($user_json,true);
+//               $data=[
+//                   'openid'=>$openid,
+//                   'sub_time'=>$xml_obj->CreateTime,
+//                   'nickname'=>$user_arr['nickname'],
+//                   'sex'=>$user_arr['sex'],
+//               ];
+//               // openid入库
+//               WxUserModel::insertGetId($data);
+//               $jie='<xml>
+//                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
+//                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+//                    <CreateTime>'.$time.'</CreateTime>
+//                    <MsgType><![CDATA[text]]></MsgType>
+//                    <Content><![CDATA['.$content.']]></Content>
+//                    </xml>';
+//               echo $jie;
+//           }
+//           }
+
+//            public function msg(){
+//                $log_file = "weixin1905.access.log";    //微信日志
+//                $xml_str = file_get_contents("php://input");
+//                $data = date('Y-m-d H:i:s') . $xml_str ;
+//                //dd($data);
+//                file_put_contents($log_file,$data,FILE_APPEND);
+//                $xml_obj=simplexml_load_string($xml_str);
+//
+//                $msg_type = $xml_obj->MsgType;
+//                 dd($msg_type);
+//                $touser = $xml_obj->FromUserName;
+//                $fromuser = $xml_obj->ToUserName;
+//                $time = time();
+//
+//                $event = $xml_obj->Event;  //获取事件类型
+//                $openid = $xml_obj->FromUserName;
+//                $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
+//                $user_json=file_get_contents($user);
+//                $user_arr=json_decode($user_json,true);
+//                $u = WxUserModel::where(['openid'=>$openid])->first();
+//                $data=[
+//                    'openid'=>$openid,
+//                    'msg_time'=>$xml_obj->CreateTime,
+//                    'nickname'=>$user_arr['nickname'],
+//                    'sex'=>$user_arr['sex'],
+//                ];
+//                $content = date('Y-m-d H:i:s') . $xml_obj->Content;
+//                WxUserModel::insertGetId($data);
+//                $jie='<xml>
+//                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
+//                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
+//                    <CreateTime>'.$time.'</CreateTime>
+//                    <MsgType><![CDATA[text]]></MsgType>
+//                    <Content><![CDATA['.$content.']]></Content>
+//                    </xml>';
+//                echo $jie;
+//            }
+        public function createMenu(){
+
+//            创建自定义菜单的接口地址
+           $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
+
+           $menu = [
+               'button' => [
+                   [
+                       'type' => 'click',
+                       'name' => '1905wx',
+                       'key' =>'1905wx_key',
+                   ],
+                   [
+                       'type' => 'click',
+                       'name' => '1905wx2',
+                       'key' =>'1905wx_key2',
+                   ],
+               ]
+           ];
+
+            $menu_json = json_encode($menu);
+            $client = new Client();
+            $response = $client->request('POST',$url,[
+                'body' => $menu_json
+            ]);
+            echo '<pre>';
+            print_r($menu);
+            echo '</pre>';
+            echo $response->getBody();  //接受 微信接口的响应数据
+
+        }
+
+
 
 }
 
