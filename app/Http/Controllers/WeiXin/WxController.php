@@ -127,11 +127,28 @@ class WxController extends Controller
             $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->access_token . '&openid=' . $openid . '&lang=zh_CN';
             $user_info = file_get_contents($url);
             file_put_contents('wx_user.log', $user_info, FILE_APPEND);
+        }elseif($event=='CLICK'){
+//            echo 'CLICK';
+            //如果是获取天气
+            if($xml_obj->EventKey=='weather'){
+//                echo 'qwqwq';die;
+
+                $response_xml='
+                <xml>
+                    <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
+                    <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
+                    <CreateTime>' . $time . '</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA[' . date('Y-m-d H:i:s') .  '晴天' . ']]></Content>
+                </xml>';
+                echo $response_xml;
+            }
+
         }
 
 
         $media_id = $xml_obj->MediaId;
-        $openid = $xml_obj->FromUserName;
+        $touser = $xml_obj->FromUserName;
         $uid = WxUserModel::where('openid', '=', $touser)->value('uid');
 //        dd($uid);
         // 回复文本
@@ -351,30 +368,20 @@ class WxController extends Controller
                        'button' => [
                            [
                                'type' => 'click',
-                               'name' => '1905wx',
-                               'key' =>'1905wx_key',
+                               'name' => '获取天气',
+                               'key' =>'weather',
                            ],
-                           [
-                               'name'=>'abc',
-                               'sub_button' => [
-                           [
-                               'type' => 'click',
-                               'name' => '1905wx2',
-                               'key' =>'1905wx_key2',
-                           ],
-                       ]
                    ]
-               ]
            ];
 
-            $menu_json = json_encode($menu);
+            $menu_json = json_encode($menu,JSON_UNESCAPED_UNICODE);
             $client = new Client();
             $response = $client->request('POST',$url,[
                 'body' => $menu_json
             ]);
-//            echo '<pre>';
-//            print_r($menu);
-//            echo '</pre>';
+            echo '<pre>';
+            print_r($menu);
+            echo '</pre>';
             echo $response->getBody();  //接受 微信接口的响应数据
 
         }
