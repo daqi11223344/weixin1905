@@ -386,7 +386,17 @@ class WxController extends Controller
                                'name' => '获取天气',
                                'key' =>'weather',
                            ],
-                   ]
+                           [
+                               'name'=>'点我❤',
+                               'sub_button' => [
+                                   ['type' => 'view',
+                                       'name' => '首页',
+                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf0e81c3bee622d60&redirect_uri='.urlencode('http://wangqi.bianaoao.top').'&response_type=code&scope=snsapi_userinfo#wechat_redirect',
+                                   ],
+                               ]
+                             ]
+                           ]
+
            ];
 
             $menu_json = json_encode($menu,JSON_UNESCAPED_UNICODE);
