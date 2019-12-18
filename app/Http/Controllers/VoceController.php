@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class VoceController extends Controller
 {
     public function index(){
-        echo '<pre>';print_r($_GET);echo '</pre>';
+        // echo '<pre>';print_r($_GET);echo '</pre>';
 
         $code = $_GET['code'];
 
@@ -16,6 +16,11 @@ class VoceController extends Controller
 
         //获取用户信息
         $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
+
+        // 处理业务逻辑
+        $redis_key = 'voce';
+        $number = Redis::incr($redis_key);
+        echo "投票成功，当前票数：".$number;
 
     }
 
@@ -45,9 +50,13 @@ class VoceController extends Controller
     protected function getUserInfo($access_token,$openid){
         $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
         $json_data = file_get_contents($url);
-        $user_info = json_decode($json_data,true);
+        $data = json_decode($json_data,true);
+        if(isset($data['errcode'])){
+            //TODO 错误处理
+            die("出错了 40001");        //40001 表示获取用户信息失败
+        }
 
-        echo '<pre>';print_r($user_info);echo '</pre>';die;
+        return $data;       //返回用户信息
 
     }
 
