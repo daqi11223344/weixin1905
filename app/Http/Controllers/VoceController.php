@@ -21,7 +21,7 @@ class VoceController extends Controller
      *
      */
 
-    protected function getAccessToken(){
+    protected function getAccessToken($code){
 
         $url= 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.env('WX_APPID').'&sercet='.env('WX_APPSECRET').'&code='.$code.'&grant_type=authorization_code';
 
