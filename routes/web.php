@@ -42,6 +42,8 @@ Route::get('/wx/msg','WeiXin\WxController@msg');        //图片
 
 Route::get('/wx/menu','WeiXin\WxController@createMenu');
 
+Route::get('/voce','VoceController@index');
+
 
 
 

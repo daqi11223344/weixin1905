@@ -376,6 +376,9 @@ class WxController extends Controller
 //            }
         public function createMenu(){
 
+            $url = 'http://wangqi.bianaoao.top/voce';
+            $redirect_uri = urlencode($url);        //授权后跳转页面
+
 //            创建自定义菜单的接口地址
            $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
 
@@ -391,9 +394,13 @@ class WxController extends Controller
                                'sub_button' => [
                                    ['type' => 'view',
                                        'name' => '首页',
-                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf0e81c3bee622d60&redirect_uri='.urlencode('http://wangqi.bianaoao.top').'&response_type=code&scope=snsapi_userinfo#wechat_redirect',
+                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx92b4938777947dcd&redirect_uri='.urlencode('http://wangqi.bianaoao.top').'&response_type=code&scope=snsapi_userinfo#wechat_redirect',
                                    ],
-                               ]
+                                   ['type' => 'view',
+                                       'name' => '投票',
+                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx92b4938777947dcd&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect',
+                                   ],
+                               ],
                              ]
                            ]
 
