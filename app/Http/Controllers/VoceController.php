@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class VoceController extends Controller
 {
@@ -18,9 +19,22 @@ class VoceController extends Controller
         $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
 
         // 处理业务逻辑
-        $redis_key = 'voce';
-        $number = Redis::incr($redis_key);
-        echo "投票成功，当前票数：".$number;
+        //TODO 胖多是否已经投过 使用redis 集合 或有序集合
+
+        $openid = $user_info['openid'];
+        $key = 's:voce:zhangsan';
+        Redis::Sadd($key,$openid);
+        $members = Redis::Smembers($key);   //获取所有投票人的openID
+
+        $total = Redis::Scard($key);        //统计投票人数
+        echo "投票总人数：".$total;
+        echo '<hr>';
+
+        echo '<pre>';print_r($members);echo '</pre>';
+
+        // $redis_key = 'voce';
+        // $number = Redis::incr($redis_key);
+        // echo "投票成功，当前票数：".$number;
 
     }
 
