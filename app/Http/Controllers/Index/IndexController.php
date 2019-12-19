@@ -30,6 +30,7 @@ class IndexController extends Controller
             'u' => $user_info
         ];
 
+
         return view('index.index',$data);
 
     }

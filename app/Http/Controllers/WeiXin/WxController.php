@@ -112,6 +112,7 @@ class WxController extends Controller
                     'sub_time' => $xml_obj->CreateTime,
                     'nickname' => $user_arr['nickname'],
                     'sex' => $user_arr['sex'],
+                    'headimgurl'=>$user_arr['headimgurl'],
                 ];
                 // openid入库
                 WxUserModel::insertGetId($data);
