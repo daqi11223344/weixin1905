@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Redis;
 class VoceController extends Controller
 {
 
+    /*
+     *
+     * 测试使用，线上禁用
+     * */
+
+    public function delKey(){
+        $key = $_GET['k'];
+        echo 'Delete Key: '.$key;echo'</br>';
+        Redis::del($key);
+    }
 
     public function index()
     {
