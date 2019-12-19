@@ -377,7 +377,9 @@ class WxController extends Controller
         public function createMenu(){
 
             $url = 'http://wangqi.bianaoao.top/voce';
-            $redirect_uri = urlencode($url);        //授权后跳转页面
+            $url2 = 'http://wangqi.bianaoao.top/';
+            $redirect_uri = urlencode($url);
+            $redirect_uri2 = urlencode($url2);//授权后跳转页面
 
 //            创建自定义菜单的接口地址
            $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
@@ -393,8 +395,8 @@ class WxController extends Controller
                                'name'=>'点我❤',
                                'sub_button' => [
                                    ['type' => 'view',
-                                       'name' => '首页',
-                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx92b4938777947dcd&redirect_uri='.urlencode('http://wangqi.bianaoao.top').'&response_type=code&scope=snsapi_userinfo#wechat_redirect',
+                                       'name' => '商店',
+                                       'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx92b4938777947dcd&redirect_uri='.$redirect_uri2.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect',
                                    ],
                                    ['type' => 'view',
                                        'name' => '投票',
@@ -403,7 +405,7 @@ class WxController extends Controller
                                    ['type' => 'view',
                                         'name' => '看看↓',
                                         'url' => 'http://kphbeijing.m.chenzhongtech.com/s/T8wVF0mu',
-                               ],
+                                   ],
                                ],
                              ]
                            ]
