@@ -42,5 +42,10 @@ class IndexController extends Controller
         return json_decode($json_data,true);
     }
 
+    public function shop()
+    {
+        return view('index.shop');
+    }
+
 
 }
