@@ -21,7 +21,7 @@
 //});
 
 Route::get('/','Index\IndexController@index');      //网站首页
-Route::get('/index/shop','Index\IndexController@shop');
+Route::get('shop','Index\IndexController@shop');
 
 
 Route::get('/info',function(){
