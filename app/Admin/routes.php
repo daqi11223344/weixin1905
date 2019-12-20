@@ -15,4 +15,6 @@ Route::group([
     $router->resource('vioce',VoiceController::class);
     $router->resource('img',ImgController::class);
 
+    $router->resource('goods',GoodsController::class);   //商品管理
+
 });
