@@ -20,8 +20,10 @@
 //    return view('welcome');
 //});
 
-Route::get('/','Index\IndexController@index');      //网站首页
-Route::get('shop','Index\IndexController@shop');
+Route::get('/',function(){
+	var_dump($_GET);
+});      //网站首页
+Route::get('shop','Goods\GoodsController@shop');
 
 
 Route::get('/info',function(){
