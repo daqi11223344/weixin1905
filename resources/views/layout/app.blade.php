@@ -22,7 +22,7 @@
     <link rel="shortcut icon" href="img/favicon.png">
 
 </head>
-
+@yield('content')
 <!-- navbar top -->
 <div class="navbar-top">
     <!-- site brand	 -->
