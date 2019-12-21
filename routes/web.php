@@ -49,6 +49,9 @@ Route::get('/wx/media','WeiXin\WxController@getmedia');        //获取临时素
 Route::get('/wx/test','WeiXin\WxController@test');        //获取临时素材
 Route::get('/wx/msg','WeiXin\WxController@msg');        //图片
 
+Route::get('/wx/sendMsg','WeiXin\WxController@sendMsg');
+
+
 Route::get('/wx/menu','WeiXin\WxController@createMenu');
 
 Route::get('/voce','VoceController@index');
