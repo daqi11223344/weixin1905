@@ -430,6 +430,17 @@ class WxController extends Controller
 
         $weather_api='https://free-api.heweather.net/s6/weather/now?location=beijing&key=090802638cdf46d4bd6162c2940cc871';
         $weather_info = file_get_contents($weather_api);
+        $weather_info_arr = json_decode($weather_info,true);
+//                echo '<pre>';
+//                print_r($weather_info_arr);
+//                echo '</pre>';
+//                die;
+
+        $cond_txt = $weather_info_arr['HeWeather6'][0]['now']['cond_txt'];
+        $tmp = $weather_info_arr['HeWeather6'][0]['now']['tmp'];
+        $wind_dir = $weather_info_arr['HeWeather6'][0]['now']['wind_dir'];
+
+        $m = $cond_txt ."\n" . '温度: '.$tmp. "\n" . '风向: '. $wind_dir;
 
         $openid = WxUserModel::select('openid','nickname','sex')->get()->toArray();
 //        echo '<pre>';print_r($openid);echo '</pre>';
@@ -438,7 +449,7 @@ class WxController extends Controller
         echo '<pre>';print_r($open);echo '</pre>';
 
         $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_vC6K8sjCp4hB75B65eohuAVXll7IaSmgEgdpYgorXSHWuJRgEqrUrZ2K08Hco7-qTGAv9beCgdeaN5vsXuwxgU63q1_sNrR0qQmA3SP7W5KTYtSqsBtZPs_Rpf3yvh-wsevophoixdXU2Ue-ZMXeAEAUHS';
-        $msg = date('Y-m-d H:i:s') ."\n" . '那个 This is my nake 的微信测试号，you look look and try 一下 ';
+        $msg = date('Y-m-d H:i:s') ."\n" . $m . "\n"  . '那个 This is my make 的微信测试号，you look look and try 一下 ';
 
         $data = [
             'touser'    =>$open,
