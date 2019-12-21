@@ -43,12 +43,5 @@ class IndexController extends Controller
         return json_decode($json_data,true);
     }
 
-    /*
-     *
-     * 商品详情页
-     *
-     * */
-
-
 
 }

@@ -22,7 +22,6 @@
     <link rel="shortcut icon" href="img/favicon.png">
 
 </head>
-@yield('content')
 <!-- navbar top -->
 <div class="navbar-top">
     <!-- site brand	 -->
@@ -37,6 +36,7 @@
 </div>
 <!-- end navbar top -->
 
+@yield('content')
 <!-- navbar bottom -->
 <div class="navbar-bottom">
     <div class="row">
