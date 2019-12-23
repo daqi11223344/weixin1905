@@ -5,34 +5,38 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\WxUserModel;
+use App\Model\GoodsModel;
 
 class IndexController extends Controller
 {
 
     public function index()
     {
-        $code = $_GET['code'];
-        $data = $this->getAccessToken($code);
+//        $code = $_GET['code'];
+//        $data = $this->getAccessToken($code);
+//
+//        //  判断用户是否已存在
+//        $openid = $data['openid'];
+//        $u = WxUserModel::where(['openid'=>$openid])->first();
+//        session(['headimgurl'=>$u['headimgurl']]);
+//        if($u){     //用户已存在
+//            $user_info = $u->toArray();
+//
+//        }else{
+//            $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
+//            //入库
+//            WxUserModel::insertGetId($user_info);
+//        }
+//
+//        $data = [
+//            'u' => $user_info
+//        ];
 
-        //  判断用户是否已存在
-        $openid = $data['openid'];
-        $u = WxUserModel::where(['openid'=>$openid])->first();
-        session(['headimgurl'=>$u['headimgurl']]);
-        if($u){     //用户已存在
-            $user_info = $u->toArray();
-
-        }else{
-            $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
-            //入库
-            WxUserModel::insertGetId($user_info);
-        }
-
-        $data = [
-            'u' => $user_info
-        ];
+        $post = GoodsModel::get();
+//        dd($post);
 
 
-        return view('index.index',$data);
+        return view('index.index',['post'=>$post]);
 
     }
 
