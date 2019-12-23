@@ -48,6 +48,7 @@ Route::post('/wx','WeiXin\WxController@receiv');        //接受微信的推送�
 Route::get('/wx/media','WeiXin\WxController@getmedia');        //获取临时素材
 Route::get('/wx/test','WeiXin\WxController@test');        //获取临时素材
 Route::get('/wx/msg','WeiXin\WxController@msg');        //图片
+Route::get('/wx/qrcode','WeiXin\WxController@qrcode');  //创建参数的我的二维码
 
 Route::get('/wx/sendMsg','WeiXin\WxController@sendMsg');
 
