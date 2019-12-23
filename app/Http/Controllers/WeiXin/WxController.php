@@ -448,7 +448,7 @@ class WxController extends Controller
         $open = array_column($openid,'openid');
         echo '<pre>';print_r($open);echo '</pre>';
 
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_vC6K8sjCp4hB75B65eohuAVXll7IaSmgEgdpYgorXSHWuJRgEqrUrZ2K08Hco7-qTGAv9beCgdeaN5vsXuwxgU63q1_sNrR0qQmA3SP7W5KTYtSqsBtZPs_Rpf3yvh-wsevophoixdXU2Ue-ZMXeAEAUHS';
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_7rqVghaNI-Q8iecPFHIYew-lIspeRDbPye4tDRHCrjuwXTaFdt2DmiErR9Yvp-BW5F-NPvQFIYJFWsyHw7hx0bSMt4nvARbiHmBVZDaWwh1a_BtrzdC0rhyttXGiAEk8gDM08ZLsP9itqE1yRSMbAFABCW';
         $msg = date('Y-m-d H:i:s') ."\n" . $m . "\n"  . '那个 This is my make 的微信测试号，you look look and try 一下 ';
 
         $data = [

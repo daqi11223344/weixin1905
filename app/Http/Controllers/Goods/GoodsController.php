@@ -15,9 +15,6 @@ class GoodsController extends Controller
 //        dd($goods_id);
         $goods = GoodsModel::find($goods_id);
         // echo '<pre>';print_r($goods->toArray());echo '</pre>';
-        $data = [
-            'goods' => $goods
-        ];
-        return view('index.shop',$data);
+        return view('index/shop',['goods'=>$goods]);
     }
 }
