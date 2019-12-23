@@ -30,8 +30,8 @@
     </div>
     <!-- end site brand	 -->
     <div class="side-nav-panel-right">
-        {{--        <a href="#" data-activates="slide-out-right" class="side-nav-left"><i class="fa fa-user"></i></a>--}}
-        <img width="50" height="50" src="{{session('headimgurl')}}" alt="">
+        <!-- {{--        <a href="#" data-activates="slide-out-right" class="side-nav-left"><i class="fa fa-user"></i></a>--}} -->
+        <img width="50" height="50" src="{{session('headimgurl')}}">
     </div>
 </div>
 <!-- end navbar top -->
