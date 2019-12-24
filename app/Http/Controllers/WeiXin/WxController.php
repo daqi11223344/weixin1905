@@ -499,6 +499,8 @@ class WxController extends Controller
         return redirect($url);
     }
 
+    
+
 
 
 }
