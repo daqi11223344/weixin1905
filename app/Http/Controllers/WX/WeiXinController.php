@@ -45,6 +45,7 @@ class WeiXinController extends Controller
         $post = file_put_contents($log,$data,FILE_APPEND);
 
         $xml_obj = simplexml_load_string($xml);
+        dd($xml_obj);
 
 
     }
