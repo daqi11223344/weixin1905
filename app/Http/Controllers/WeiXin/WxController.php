@@ -76,7 +76,7 @@ class WxController extends Controller
     {
         $log_file = "weixin1905.access.log";    //微信日志
         $xml_str = file_get_contents("php://input");
-        $data = date('Y-m-d H:i:s') . $xml_str;
+        $data = date('Y-m-d H:i:s') . "\n" . $xml_str;
 
         file_put_contents($log_file, $data, FILE_APPEND);
         $xml_obj = simplexml_load_string($xml_str);
