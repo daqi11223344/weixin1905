@@ -60,6 +60,8 @@ Route::get('/voce','VoceController@index');
 
 Route::get('/weixin/index','WX\WeiXinController@index');
 Route::get('/weixin','WX\WeiXinController@weixin');
+Route::post('/weixin','WX\WeiXinController@log');
+
 
 
 

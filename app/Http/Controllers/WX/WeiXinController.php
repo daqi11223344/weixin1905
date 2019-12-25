@@ -4,12 +4,13 @@ namespace App\Http\Controllers\WX;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Model\WxUserModel;
 
 class WeiXinController extends Controller
 {
     public function index()
     {
-        echo __METHOD__;
+        echo $token = WxUserModel::getAccessToken();
     }
 
     public function weixin()
@@ -32,5 +33,19 @@ class WeiXinController extends Controller
         }else{
             // die("not ok");
         }
+    }
+
+    // 将微信服务器的推送数据保存到日志文件；
+    public function log()
+    {
+        $log = 'wq.log';
+        $xml = file_get_contents('http://input');
+
+        $data = date('Y-m-d H:i:s').$log;
+        $post = file_put_contents($log,$data,FILE_APPEND);
+
+        $xml_obj = simplexml_load_string($xml);
+
+
     }
 }
