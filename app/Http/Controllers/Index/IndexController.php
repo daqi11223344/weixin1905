@@ -13,6 +13,7 @@ class IndexController extends Controller
 
     public function index()
     {
+        // $token=WxUserModel::getAccessToken();
         // $code = $_GET['code'];
         // $data = $this->getAccessToken($code);
 

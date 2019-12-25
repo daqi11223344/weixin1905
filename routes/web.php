@@ -11,18 +11,18 @@
 |
 */
 
-//Route::get('/', function () {
-////    $file_name = "adc.mp3";
-////    $info = pathinfo($file_name);
-////
-////    echo $file_name . '的文件扩展名为 ：' . pathinfo($file_name)['extension'];die;
-////    echo '<pre>';print_r($info);echo '</pre>';die;
+// Route::get('/', function () {
+// //    $file_name = "adc.mp3";
+// //    $info = pathinfo($file_name);
+// //
+// //    echo $file_name . '的文件扩展名为 ：' . pathinfo($file_name)['extension'];die;
+// //    echo '<pre>';print_r($info);echo '</pre>';die;
 //    return view('welcome');
-//});
+// });
 
-//Route::get('/',function(){
-//	var_dump($_GET);
-//});      //网站首页
+Route::get('/',function(){
+	var_dump($_GET);
+});      //网站首页
 
 Route::get('/','Index\IndexController@index');
 
@@ -56,6 +56,16 @@ Route::get('/wx/sendMsg','WeiXin\WxController@sendMsg');
 Route::get('/wx/menu','WeiXin\WxController@createMenu');
 
 Route::get('/voce','VoceController@index');
+
+
+Route::get('/weixin/index','WX\WeiXinController@index');
+
+
+
+
+// Route::get('wx/index','WeiXin\WxController@index');
+// Route::get('wx/wechat','WeiXin\WxController@wechat');
+
 
 
 

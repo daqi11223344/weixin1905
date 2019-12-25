@@ -19,14 +19,25 @@ class WxController extends Controller
         $this->access_token = $this->getAccessToken();
     }
 
+
+    /**
+     * 输出access_token
+     *
+     * @return void
+     */
     public function test(){
         echo $this->access_token;
     }
 
+    /**
+     * 获取access_token
+     *
+     * @return void
+     */
     public function getAccessToken(){
         $Key = 'wx_access_token';
         $access_token = Redis::get($Key);
-//        var_dump($access_token);die;
+        // var_dump($access_token);die;
         if($access_token){
             return $access_token;
         }
@@ -246,135 +257,12 @@ class WxController extends Controller
         file_put_contents($log_file,$json_str,FILE_APPEND);
     }
 
+    
     /**
-     * 获取素材
+     * 自定义菜单
+     *
+     * @return void
      */
-
-//
-//      public function getMedia()
-//     {
-//          $media_id = 'pH2POWFmWPlF_kLyGZFrSh5vcInS8d0BLg6LPzbWyR6NquxR0RTR7mlIPg2sJgmz';
-//          $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->access_token.'&media_id='.$media_id;
-//
-//         //  下载图片
-//         $data = file_get_contents($url);
-//
-//         // 保存文件
-//         $file_name = date('YmdHis').mt_rand(11111,99999).'.amr';
-//         file_put_contents($file_name,$data);
-//
-//         echo "下载素材成功";echo'</br>';
-//         echo "文件名: ".$file_name;
-//         }
-
-
-        public function getMedia2($media_id,$media_type){
-            $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$this->access_token.'&media_id='.$media_id;
-
-           //  下载图片
-        //    $data = file_get_contents($url);
-        //    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        //    $file_info = finfo_file($finfo,$data);
-        //    var_dump($file_info);die;
-
-        $client = new Client();
-        $response = $client->request('GET',$url);
-
-        // 获取文件类型
-        $content_type = $response->getHeader('Content-Type')[0];
-//        echo $content_type;echo '<br>';
-        $post = strpos($content_type,'/');
-//        echo '/的位置: ' . $post;
-        $extension = '.' . substr($content_type,$post+1);
-//        echo 'extension: '.$extension;die;
-        
-        // 获取文件内容
-        $file_content = $response->getBody();
-   
-           // 保存文件
-            $save_path = 'wx_media/';
-            if($media_type=='image'){     //保存图片文件
-                $file_name = date('YmdHis').mt_rand(11111,99999) . $extension;
-                $save_path = $save_path . 'imgs/' . $file_name;
-            }elseif($media_type=='voice'){  //保存语音文件
-                $file_name = date('YmdHis').mt_rand(11111,99999) . $extension;
-                $save_path = $save_path . 'voice/' . $file_name;
-            }
-
-           
-           file_put_contents($save_path,$file_content);
-            return $save_path;
-           }
-
-            //保存图片至数据库
-//           public function img(){
-//               $xml_str = file_get_contents("php://input");
-//               $xml_obj=simplexml_load_string($xml_str);
-//               $msg_type = $xml_obj->MsgType;
-//               // dd($msg_type);
-//               $touser = $xml_obj->FromUserName;
-//               $fromuser = $xml_obj->ToUserName;
-//               $time = time();
-//               $openid = $xml_obj->FromUserName;
-//               $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
-//               $user_json=file_get_contents($user);
-//               $user_arr=json_decode($user_json,true);
-//               $data=[
-//                   'openid'=>$openid,
-//                   'sub_time'=>$xml_obj->CreateTime,
-//                   'nickname'=>$user_arr['nickname'],
-//                   'sex'=>$user_arr['sex'],
-//               ];
-//               // openid入库
-//               WxUserModel::insertGetId($data);
-//               $jie='<xml>
-//                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
-//                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-//                    <CreateTime>'.$time.'</CreateTime>
-//                    <MsgType><![CDATA[text]]></MsgType>
-//                    <Content><![CDATA['.$content.']]></Content>
-//                    </xml>';
-//               echo $jie;
-//           }
-//           }
-
-//            public function msg(){
-//                $log_file = "weixin1905.access.log";    //微信日志
-//                $xml_str = file_get_contents("php://input");
-//                $data = date('Y-m-d H:i:s') . $xml_str ;
-//                //dd($data);
-//                file_put_contents($log_file,$data,FILE_APPEND);
-//                $xml_obj=simplexml_load_string($xml_str);
-//
-//                $msg_type = $xml_obj->MsgType;
-//                 dd($msg_type);
-//                $touser = $xml_obj->FromUserName;
-//                $fromuser = $xml_obj->ToUserName;
-//                $time = time();
-//
-//                $event = $xml_obj->Event;  //获取事件类型
-//                $openid = $xml_obj->FromUserName;
-//                $user='https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->getAccessToken().'&openid='.$openid.'&lang=zh_CN';
-//                $user_json=file_get_contents($user);
-//                $user_arr=json_decode($user_json,true);
-//                $u = WxUserModel::where(['openid'=>$openid])->first();
-//                $data=[
-//                    'openid'=>$openid,
-//                    'msg_time'=>$xml_obj->CreateTime,
-//                    'nickname'=>$user_arr['nickname'],
-//                    'sex'=>$user_arr['sex'],
-//                ];
-//                $content = date('Y-m-d H:i:s') . $xml_obj->Content;
-//                WxUserModel::insertGetId($data);
-//                $jie='<xml>
-//                    <ToUserName><![CDATA['.$touser.']]></ToUserName>
-//                    <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
-//                    <CreateTime>'.$time.'</CreateTime>
-//                    <MsgType><![CDATA[text]]></MsgType>
-//                    <Content><![CDATA['.$content.']]></Content>
-//                    </xml>';
-//                echo $jie;
-//            }
         public function createMenu(){
 
             $url = 'http://wangqi.bianaoao.top/voce';
@@ -382,7 +270,7 @@ class WxController extends Controller
             $redirect_uri = urlencode($url);
             $redirect_uri2 = urlencode($url2);//授权后跳转页面
 
-//            创建自定义菜单的接口地址
+            // 创建自定义菜单的接口地址
            $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token;
 
                    $menu = [
@@ -424,6 +312,11 @@ class WxController extends Controller
             echo $response->getBody();  //接受 微信接口的响应数据
 
         }
+    /**
+     * 消息群发
+     *
+     * @return void
+     */
     public function sendMsg(){
         echo __METHOD__;
 
@@ -431,10 +324,10 @@ class WxController extends Controller
         $weather_api='https://free-api.heweather.net/s6/weather/now?location=beijing&key=090802638cdf46d4bd6162c2940cc871';
         $weather_info = file_get_contents($weather_api);
         $weather_info_arr = json_decode($weather_info,true);
-//                echo '<pre>';
-//                print_r($weather_info_arr);
-//                echo '</pre>';
-//                die;
+            //    echo '<pre>';
+            //    print_r($weather_info_arr);
+            //    echo '</pre>';
+            //    die;
 
         $cond_txt = $weather_info_arr['HeWeather6'][0]['now']['cond_txt'];
         $tmp = $weather_info_arr['HeWeather6'][0]['now']['tmp'];
@@ -443,7 +336,7 @@ class WxController extends Controller
         $m = $cond_txt ."\n" . '温度: '.$tmp. "\n" . '风向: '. $wind_dir;
 
         $openid = WxUserModel::select('openid','nickname','sex')->get()->toArray();
-//        echo '<pre>';print_r($openid);echo '</pre>';
+        // echo '<pre>';print_r($openid);echo '</pre>';
 
         $open = array_column($openid,'openid');
         echo '<pre>';print_r($open);echo '</pre>';
@@ -467,11 +360,16 @@ class WxController extends Controller
 
     }
 
+    /**
+     * 生成二维码
+     *
+     * @return void
+     */
     public function qrcode(){
 
         $scene_id = $_GET['scene'];     //二维码参数
 
-//        $access_token = WxUserModel::getAccessToken();
+        //$access_token = WxUserModel::getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token;
 
         $post = [
