@@ -41,7 +41,7 @@ class WeiXinController extends Controller
         $log = 'wq.log';
         $xml = file_get_contents('php://input');
 
-        $data = date('Y-m-d H:i:s').$log;
+        $data = date('Y-m-d H:i:s').$xml;
         $post = file_put_contents($log,$data,FILE_APPEND);
 
         $xml_obj = simplexml_load_string($xml);
