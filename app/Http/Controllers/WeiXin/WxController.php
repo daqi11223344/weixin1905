@@ -94,6 +94,7 @@ class WxController extends Controller
             $user = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->getAccessToken() . '&openid=' . $openid . '&lang=zh_CN';
             $user_json = file_get_contents($user);
             $user_arr = json_decode($user_json, true);
+            dd($user_arr);
             $u = WxUserModel::where(['openid' => $openid])->first();
             if ($u) {
                 // TODO欢迎回来
@@ -114,9 +115,8 @@ class WxController extends Controller
                     </xml>';
                 echo $jie;
             } else {
-
-
-                $content = '欢迎'.$user_arr['nickname'].'同学，感谢您的关注';
+                 $content = '欢迎'.$user_arr['nickname'].'同学，感谢您的关注';
+                // dd($content);
                 //第一次关注添加入库
                 $data = [
                     'openid' => $openid,
@@ -126,7 +126,7 @@ class WxController extends Controller
                     'headimgurl'=>$user_arr['headimgurl'],
                 ];
                 // openid入库
-                WxUserModel::insertGetId($data);
+                WxUserModel::insert($data);
                 $jie = '<xml>
                     <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
                     <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
