@@ -60,15 +60,15 @@ class WeiXinController extends Controller
             $json = file_get_contents($user);
             $arr = json_decode($json,true);
             $array = WxUserModel::where(['openid'=>$openid])->first();
-            // dd($array);
+            // dd($arr);
             // 判断是否为新用户
             if($array){
-                $content = '浪够了回来了' . $array['nickname'];
+                $content = '浪够了回来了' . $arr['nickname'];
                 // dd($content);
                 $data = [
                     'sub_time' => $xml_obj->CreateTime,
-                    'nickname' => $array['nickname'],
-                    'sex'      => $array['sex'],   
+                    'nickname' => $arr['nickname'],
+                    'sex'      => $arr['sex'],   
                 ];
                 // dd($data);
                 $post  =WxUserModel::where('openid','=',$openid)->update($data);
@@ -82,17 +82,18 @@ class WeiXinController extends Controller
                     </xml>';
                 echo $wx;
             }else{
-                $content = '您好，欢迎来到我们的大家庭' . $array['nickname'];
+                $content = '您好，欢迎来到我们的大家庭@' . $arr['nickname'];
                 // 第一次关注添加入库
                 $data = [
                     'openid'   => $openid,
                     'sub_time' => $xml_obj->CreateTime,
-                    'nickname' => $array['nickname'],
-                    'sex'      => $array['sex'],
-                    'headimgurl' => $array['headimgurl'],
+                    'nickname' => $arr['nickname'],
+                    'sex'      => $arr['sex'],
+                    'headimgurl' => $arr['headimgurl'],
                 ];
                 // dd($data);
-                WxUserModel::insertGetId($data);
+                $post = WxUserModel::insert($data);
+                
                 $wx = '<xml><ToUserName><![CDATA['.$touser.']]></ToUserName>
                     <FromUserName><![CDATA['.$fromuser.']]></FromUserName>
                     <CreateTime>'.$time.'</CreateTime>
