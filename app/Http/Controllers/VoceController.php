@@ -99,7 +99,7 @@ class VoceController extends Controller
 
         $u = Redis::hGetAll($key);
         echo '<pre>';print_r($u);echo '</pre>';
-        echo '<pre>';print_r($user_info);echo '</pre>';die;
+        // echo '<pre>';print_r($user_info);echo '</pre>';die;
     }
 
 }
