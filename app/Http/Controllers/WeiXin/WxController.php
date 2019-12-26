@@ -35,17 +35,17 @@ class WxController extends Controller
      * @return void
      */
     public function getAccessToken(){
-        $Key = 'wx_access_token';
-        $access_token = Redis::get($Key);
-        // var_dump($access_token);die;
-        if($access_token){
-            return $access_token;
-        }
+        // $Key = 'wx_access_token';
+        // $access_token = Redis::get($Key);
+        // // var_dump($access_token);die;
+        // if($access_token){
+        //     return $access_token;
+        // }
         $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.env('WX_APPID').'&secret='.env('WX_APPSECRET').'';
         $data_json = file_get_contents($url);
         $arr = json_decode($data_json,true);
-        Redis::set($Key,$arr['access_token']);
-        redis::expire($Key,3600);
+        // Redis::set($Key,$arr['access_token']);
+        // redis::expire($Key,3600);
         return $arr['access_token'];
     }
     
@@ -94,7 +94,7 @@ class WxController extends Controller
             $user = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->getAccessToken() . '&openid=' . $openid . '&lang=zh_CN';
             $user_json = file_get_contents($user);
             $user_arr = json_decode($user_json, true);
-            dd($user_arr);
+            //dd($user_arr);
             $u = WxUserModel::where(['openid' => $openid])->first();
             if ($u) {
                 // TODO欢迎回来
@@ -248,42 +248,7 @@ class WxController extends Controller
 
     }
 
-    /**
-     * 生成二维码
-     *
-     * @return void
-     */
-    public function qrcode(){
-
-        $scene_id = $_GET['scene'];     //二维码参数
-
-        //$access_token = WxUserModel::getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token;
-
-        $post = [
-            'expire_seconds'    =>604800,
-            'action_name'       =>'QR_SCENE',
-            'action_info'       =>[
-                'scene' =>[
-                    'scene_id' => $scene_id
-                ]
-            ]
-        ];
-        $client = new Client();
-        $response = $client->request('POST',$url,[
-            'body' => json_encode($post)
-        ]);
-
-        $json1 = $response->getBody();
-
-        $toket = json_decode($json1,true)['ticket'];
-
-        //第二部获取带参数的二维码
-
-        $url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$toket;
-
-        return redirect($url);
-    }
+ 
 
     
 
