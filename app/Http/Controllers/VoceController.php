@@ -27,7 +27,7 @@ class VoceController extends Controller
         $data = $this->getAccessToken($code);
         //获取用户信息
         $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
-        echo '<pre>';print_r($user_info);echo '</pre>';
+        // echo '<pre>';print_r($user_info);echo '</pre>';
 
         $userinfo_key = 'h:u:'.$data['openid'];
         Redis::hMset($userinfo_key,$user_info);

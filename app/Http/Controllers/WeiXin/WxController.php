@@ -140,15 +140,14 @@ class WxController extends Controller
             $user_info = file_get_contents($url);
             file_put_contents('wx_user.log', $user_info, FILE_APPEND);
         }elseif($event=='CLICK'){
-                        if($xml_obj->EventKey=='abc'){
-                            $cc = '签到成功';
+                        if($xml_obj->EventKey=='weather'){
                             $response_xml='
                             <xml>
                                 <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
                                 <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
                                 <CreateTime>' . $time . '</CreateTime>
                                 <MsgType><![CDATA[text]]></MsgType>
-                                <Content><![CDATA[' .$cc.']]></Content>
+                                <Content><![CDATA[' . date('Y-m-d H:i:s').']]></Content>
                             </xml>';
                             echo $response_xml;
                         }
@@ -187,15 +186,15 @@ class WxController extends Controller
 
                    $menu = [
                        'button' => [
-                        // [
-                        //     'type' => 'click',
-                        //     'name' => '点我查询',
-                        //     'key' =>'weather',
-                        // ],
-                           [
+                        [
                             'type' => 'click',
+                            'name' => '点我查询',
+                            'key' =>'weather',
+                        ],
+                           [
+                            'type' => 'view',
                             'name' => '点我积分❤',
-                            'key' =>'abc',
+                            'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx92b4938777947dcd&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state=ABCD1905#wechat_redirect',
                            ],
                           
                            ]
@@ -222,14 +221,28 @@ class WxController extends Controller
         echo __METHOD__;
 
 
+        $weather_api='https://free-api.heweather.net/s6/weather/now?location=beijing&key=090802638cdf46d4bd6162c2940cc871';
+        $weather_info = file_get_contents($weather_api);
+        $weather_info_arr = json_decode($weather_info,true);
+            //    echo '<pre>';
+            //    print_r($weather_info_arr);
+            //    echo '</pre>';
+            //    die;
+
+        $cond_txt = $weather_info_arr['HeWeather6'][0]['now']['cond_txt'];
+        $tmp = $weather_info_arr['HeWeather6'][0]['now']['tmp'];
+        $wind_dir = $weather_info_arr['HeWeather6'][0]['now']['wind_dir'];
+
+        $m = $cond_txt ."\n" . '温度: '.$tmp. "\n" . '风向: '. $wind_dir;
+
         $openid = WxUserModel::select('openid','nickname','sex')->get()->toArray();
         // echo '<pre>';print_r($openid);echo '</pre>';
 
         $open = array_column($openid,'openid');
         echo '<pre>';print_r($open);echo '</pre>';
 
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_7rqVghaNI-Q8iecPFHIYew-lIspeRDbPye4tDRHCrjuwXTaFdt2DmiErR9Yvp-BW5F-NPvQFIYJFWsyHw7hx0bSMt4nvARbiHmBVZDaWwh1a_BtrzdC0rhyttXGiAEk8gDM08ZLsP9itqE1yRSMbAFABCW';
-        $msg = date('Y-m-d H:i:s') . "\n"  . '那个 This is my make 的微信测试号，you look look and try 一下 ';
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_lp7H2vzsQl0iOxS5gW57sgLz4vdVePYX5kFcaEHgQiK27sJGdmCjgBzWGv0UJcs_wagZ1BS46UNjBSyDyGZoff12qaOByo22Q0xehC0fdrINNz-ID5j95ZD3fREUjOCYkJjfWx9_xzADJ9GvUTYfABAKJO';
+        $msg = date('Y-m-d H:i:s') . "\n" . '尊敬的用户您好，目前公司开展签到送积分兑换活动，详情请进入公众号查看 ';
 
         $data = [
             'touser'    =>$open,
