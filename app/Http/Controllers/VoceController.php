@@ -27,6 +27,7 @@ class VoceController extends Controller
         $data = $this->getAccessToken($code);
         //获取用户信息
         $user_info = $this->getUserInfo($data['access_token'],$data['openid']);
+        echo '<pre>';print_r($user_info);echo '</pre>';
 
         $userinfo_key = 'h:u:'.$data['openid'];
         Redis::hMset($userinfo_key,$user_info);
@@ -97,7 +98,8 @@ class VoceController extends Controller
         echo'<hr>';
 
         $u = Redis::hGetAll($key);
-        echo '<pre>';print_r($u);echo '</pre>';die;
+        echo '<pre>';print_r($u);echo '</pre>';
+        echo '<pre>';print_r($user_info);echo '</pre>';die;
     }
 
 }
