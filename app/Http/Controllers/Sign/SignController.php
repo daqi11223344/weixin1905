@@ -13,7 +13,7 @@ class SignController extends Controller
         echo __METHOD__;
     }
 
-    public function wangqi()
+    public function sign()
     {
         $token = '2259b56f5898cd6192c50';       //开发提前设置好的 token
         $signature = $_GET["signature"];
