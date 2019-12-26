@@ -139,19 +139,7 @@ class WxController extends Controller
             $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $this->access_token . '&openid=' . $openid . '&lang=zh_CN';
             $user_info = file_get_contents($url);
             file_put_contents('wx_user.log', $user_info, FILE_APPEND);
-        }elseif($event=='CLICK'){
-                        if($xml_obj->EventKey=='weather'){
-                            $response_xml='
-                            <xml>
-                                <ToUserName><![CDATA[' . $touser . ']]></ToUserName>
-                                <FromUserName><![CDATA[' . $fromuser . ']]></FromUserName>
-                                <CreateTime>' . $time . '</CreateTime>
-                                <MsgType><![CDATA[text]]></MsgType>
-                                <Content><![CDATA[' . date('Y-m-d H:i:s').']]></Content>
-                            </xml>';
-                            echo $response_xml;
-                        }
-                    }
+        }
         }
 
 
