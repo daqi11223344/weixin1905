@@ -62,12 +62,8 @@ Route::get('/weixin/index','WX\WeiXinController@index');
 Route::get('/weixin','WX\WeiXinController@weixin');
 Route::post('/weixin','WX\WeiXinController@log');
 
-
-
-
-
-// Route::get('wx/index','WeiXin\WxController@index');
-// Route::get('wx/wechat','WeiXin\WxController@wechat');
+// 签到
+Route::get('/sign/index','Sign\SignController@index');
 
 
 
