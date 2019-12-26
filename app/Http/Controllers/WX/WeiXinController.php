@@ -47,10 +47,10 @@ class WeiXinController extends Controller
         file_put_contents($log,$data,FILE_APPEND);
 
         $xml_obj = simplexml_load_string($xml);
-        $msg_type = $xml_obj->MsgType;
-        $touser = $xml_obj->FromUserName;
-        $fromuser = $xml_obj->ToUserName;
-        $time = time();
+                $msg_type = $xml_obj->MsgType;
+                $touser = $xml_obj->FromUserName;
+                $fromuser = $xml_obj->ToUserName;
+                $time = time();
         // dd($xml_obj);
         $pos = $xml_obj->Event;
         if($pos == 'subscribe'){
