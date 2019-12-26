@@ -241,7 +241,7 @@ class WxController extends Controller
         $open = array_column($openid,'openid');
         echo '<pre>';print_r($open);echo '</pre>';
 
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_lp7H2vzsQl0iOxS5gW57sgLz4vdVePYX5kFcaEHgQiK27sJGdmCjgBzWGv0UJcs_wagZ1BS46UNjBSyDyGZoff12qaOByo22Q0xehC0fdrINNz-ID5j95ZD3fREUjOCYkJjfWx9_xzADJ9GvUTYfABAKJO';
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=28_FBKrsEB5nLpGuyYdD4d1S-PF9xOSFsEIl47Lgg6s-ZTXCJv3uwDIg2MNQO7V3W3YTi7YNsQpjIUOhudCwQebfWrp0l4mW5wI5CArhoufVVW_76IdipPZQlJHuRej-OxtrWxIV24hD_voA-MrXAMdAIAEHT';
         $msg = date('Y-m-d H:i:s') . "\n" . '尊敬的用户您好，目前公司开展签到送积分兑换活动，详情请进入公众号查看 ';
 
         $data = [
