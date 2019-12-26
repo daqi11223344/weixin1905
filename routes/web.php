@@ -65,6 +65,7 @@ Route::post('/weixin','WX\WeiXinController@log');
 // 签到
 Route::get('/sign/index','Sign\SignController@index');
 Route::get('/sign','Sign\SignController@sign');
+Route::post('/sign','Sign\SignController@add');
 
 
 

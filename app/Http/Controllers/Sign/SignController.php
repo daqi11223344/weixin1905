@@ -10,7 +10,7 @@ class SignController extends Controller
 {
     public function index()
     {
-        echo __METHOD__;
+        echo $token = WxUserModel::getAccessToken();
     }
 
     public function sign()
@@ -34,4 +34,16 @@ class SignController extends Controller
             // die("not ok");
         }
     }
+
+    public function add()
+    {
+        $log = 'add.log';
+        $token = WxUserModel::getAccessToken();
+        $xml = file_get_contents('php://input');
+
+        $data = date('Y-m-d H:i:s') . ">>>>>\n" . $xml;
+        file_put_contents($log,$data,FILE_APPEND);
+        dd($data);
+    }
+
 }
